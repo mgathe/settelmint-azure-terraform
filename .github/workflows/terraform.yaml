@@ -13,48 +13,50 @@ on:
 
 jobs:
   terraform:
-   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-   env:
-    ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
-    ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
-    ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
-    ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
-    CURRENT_ENV: settelmint-assignment
-    GITHUB_TOKEN: ${{secretsGITHUB_TOKEN}}
+    env:
+      ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+      CURRENT_ENV: settelmint-assignment
+      GITHUB_TOKEN: ${{secretsGITHUB_TOKEN}}
   
-  steps:
-       name: Checkout
-       uses: actions/checkout@v3
-       with:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
           fetch-depth: 0
       
-     - name: Terraform Install
-       uses: hashicorp/setup-terraform@v2
-       with:
+      - name: Terraform Install
+        uses: hashicorp/setup-terraform@v2
+        with:
           terraform_version: 0.14.5
     
-     - name: AZ login
-       run: |
+      - name: AZ login
+        run: |
         az login --service-principle -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET -t $ARM_TENANT_ID
         az account set --subscription $ARM_SUBSCRIPTION_ID
     
-     - name: Terraform Format
-       run: |
+      - name: Terraform Format
+        run: |
          terraform fmt -check -recursive -no-color
     
-     - name: Terraform Init
+      - name: Terraform Init
+        run: |
+          terraform init -input=false
+        working-directory: settelmint-assignment
+    
+      -name: Terraform Plan
+       if: github.event_name == 'pull_request'
        run: |
-         terraform init -input=false
+         terraform plan
        working-directory: settelmint-assignment
     
-     -name: Terraform Plan
-      if: github.event_name == 'pull_request'
-      run: |
-         terraform plan
-    
-     -name: Terraform Apply
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: |
+      -name: Terraform Apply
+       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+       run: |
          terraform apply -auto-approve
+       working-directory: settelmint-assignment
       
