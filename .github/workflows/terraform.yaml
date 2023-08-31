@@ -48,15 +48,15 @@ jobs:
           terraform init -input=false
         working-directory: settelmint-assignment
     
-      -name: Terraform Plan
-       if: github.event_name == 'pull_request'
-       run: |
+      - name: Terraform Plan
+        if: github.event_name == 'pull_request'
+        run: |
          terraform plan
-       working-directory: settelmint-assignment
+        working-directory: settelmint-assignment
     
-      -name: Terraform Apply
-       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-       run: |
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
          terraform apply -auto-approve
        working-directory: settelmint-assignment
       
