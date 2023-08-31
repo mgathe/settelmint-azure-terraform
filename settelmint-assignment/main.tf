@@ -1,13 +1,13 @@
 #settup terraform state storage within azure. 
 
 terraform {
-    backend "azurerm"{
-        storage account name = "assignment1312"
-        container_name = "settelmint-assignment"
-        key            = "tfstate"
-        resource_group_name= "TFSTATE"
-        subscription_id = "a0bb738b-7d5a-48ae-87db-4aa0c520444b"
-    }
+  backend "azurerm" {
+    storage_account_name = "assignment1312"
+    container_name       = "settelmint-assignment"
+    key                  = "tfstate"
+    resource_group_name  = "TFSTATE"
+    subscription_id      = "a0bb738b-7d5a-48ae-87db-4aa0c520444b"
+  }
 }
 
 # resource group to contain all the resources of this assignment
