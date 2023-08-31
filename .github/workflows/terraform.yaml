@@ -1,7 +1,7 @@
 name: Infrastucture creation
 
 on:
-  pull_reuquest: 
+  pull_request: 
      paths:
        - 'settelmint-assignment/**'
        - '!**.md'
