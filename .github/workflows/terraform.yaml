@@ -13,7 +13,7 @@ on:
 
 jobs:
   terraform:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
 
     env:
       ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
@@ -21,7 +21,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
       CURRENT_ENV: settelmint-assignment
-      GITHUB_TOKEN: ${{secretsGITHUB_TOKEN}}
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
     steps:
       - name: Checkout
@@ -36,7 +36,7 @@ jobs:
     
       - name: AZ login
         run: |
-          az login --service-principle -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET -t $ARM_TENANT_ID
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET -t $ARM_TENANT_ID
           az account set --subscription $ARM_SUBSCRIPTION_ID
     
       - name: Terraform Format
