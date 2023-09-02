@@ -24,5 +24,5 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name = azurerm_resource_group.example.name
   location            = var.azure_region
   sku                 = "Basic"
-  tags     = var.resource_tags
+  tags                = var.resource_tags
 }
