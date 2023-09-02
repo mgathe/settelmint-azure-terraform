@@ -16,3 +16,13 @@ resource "azurerm_resource_group" "example" {
   location = var.azure_region
   tags     = var.resource_tags
 }
+
+#acr to push docker images
+
+resource "azurerm_container_registry" "acr" {
+  name                = "settelmintacr"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = var.azure_region
+  sku                 = "Basic"
+  tags     = var.resource_tags
+}
